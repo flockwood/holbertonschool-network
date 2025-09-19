@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+# Script to listen on port 98 on localhost and display received text
+
+# Check if running as root (recommended for low port numbers, though 98 isn't that low)
+if [[ $EUID -ne 0 ]]; then
+   echo "Note: Running without root privileges. This should work for port 98."
+fi
+
+# Use netcat to listen on port 98 on localhost
+# -l: listen mode
+# -p: specify port number
+# localhost: bind to localhost interface only
+nc -l localhost 98
