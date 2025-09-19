@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+# Script to change localhost resolution to 127.0.0.2 and facebook.com to 8.8.8.8
+
+# Check if running as root
+if [[ $EUID -ne 0 ]]; then
+   echo "This script must be run as root (use sudo)" 
+   exit 1
+fi
+
+# Backup the original /etc/hosts file
+cp /etc/hosts /etc/hosts.backup
+
+# Create a temporary file for the new hosts configuration
+temp_file=$(mktemp)
+
+# Read the current /etc/hosts file and modify it
+while IFS= read -r line; do
+    # Skip existing localhost entries that point to 127.0.0.1
+    if [[ $line =~ ^127\.0\.0\.1[[:space:]]+localhost ]]; then
+        continue
+    # Skip existing facebook.com entries
+    elif [[ $line =~ facebook\.com ]]; then
+        continue
+    else
+        echo "$line" >> "$temp_file"
+    fi
+done < /etc/hosts
+
+# Add the new entries
+echo "127.0.0.2 localhost" >> "$temp_file"
+echo "8.8.8.8 facebook.com" >> "$temp_file"
+
+# Replace the original /etc/hosts file with our modified version
+mv "$temp_file" /etc/hosts
+
+# Set proper permissions
+chmod 644 /etc/hosts
+
+echo "DNS resolution changed successfully:"
+echo "- localhost now resolves to 127.0.0.2"
+echo "- facebook.com now resolves to 8.8.8.8"
+echo ""
+echo "Original /etc/hosts backed up to /etc/hosts.backup"
+echo "To revert changes, run: sudo cp /etc/hosts.backup /etc/hosts"
