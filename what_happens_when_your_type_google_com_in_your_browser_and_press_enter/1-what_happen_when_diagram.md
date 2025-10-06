@@ -1,3 +1,4 @@
+```mermaid
 graph TD
     A[User types https://www.google.com<br/>and presses Enter] --> B[DNS Resolution]
     B -->|Returns IP: 142.250.80.46| C[Browser initiates request<br/>to IP:443 HTTPS port]
@@ -14,3 +15,4 @@ graph TD
     E --> D
     D -->|Encrypted response| C
     C --> J[Browser displays<br/>Google homepage]
+```
