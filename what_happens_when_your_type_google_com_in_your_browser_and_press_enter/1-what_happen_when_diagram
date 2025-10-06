@@ -1,0 +1,16 @@
+graph TD
+    A[User types https://www.google.com<br/>and presses Enter] --> B[DNS Resolution]
+    B -->|Returns IP: 142.250.80.46| C[Browser initiates request<br/>to IP:443 HTTPS port]
+    C --> D[Traffic Encrypted<br/>via HTTPS/SSL]
+    D --> E[Firewall<br/>Security Check]
+    E -->|Traffic allowed| F[Load Balancer<br/>Distributes request]
+    F --> G[Web Server<br/>Receives request]
+    G --> H[Application Server<br/>Generates web page]
+    H --> I[Database<br/>Queries user data]
+    I -->|Returns data| H
+    H -->|Sends generated page| G
+    G -->|Sends response| F
+    F --> E
+    E --> D
+    D -->|Encrypted response| C
+    C --> J[Browser displays<br/>Google homepage]
